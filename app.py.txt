@@ -1,0 +1,37 @@
+
+import streamlit as st
+import cv2
+import numpy as np
+from PIL import Image, ImageOps
+
+# Set up page configurations
+st.set_page_config(page_title="Glossome: Dynamic Stencil", layout="centered")
+
+# Title and Headers
+st.markdown("## 👅 Glossome: Dynamic Tracking UI")
+st.markdown("### Perfecting the Extraction: Live Anatomical Boundary Mapping")
+
+# ==========================================
+# # 3. CAMERA INTERFACE (Strictly Live Only)
+# ==========================================
+st.markdown("<p class='big-font'>1. Image Acquisition</p>", unsafe_allow_html=True)
+st.info("⚠️ Ensure the room is dark and the camera flash is ON before capturing.")
+
+# Enforces your strict rule: Only live camera, zero file uploads allowed
+active_file = st.camera_input("Position the tongue inside the frame and capture")
+
+# Process the image immediately upon capture
+if active_file is not None:
+    # Load and orient image
+    raw_img = Image.open(active_file)
+    oriented_photo = ImageOps.exif_transpose(raw_img)
+    
+    # Convert to OpenCV format for the TCM engine processing
+    img_np = np.array(oriented_photo)
+    img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+    h, w, _ = img_bgr.shape
+    
+    # --- YOUR AI TCM DIAGNOSIS ENGINE RUNS BELOW HERE ---
+    st.success(window_message := "Image captured successfully! Processing boundary mapping...")
+    
+    # [Your engine analysis logic continues here...]
